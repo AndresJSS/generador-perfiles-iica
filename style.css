@@ -1,0 +1,141 @@
+/* Configuración estricta para emular el renderizado nativo en A4 */
+.pdf-page {
+    width: 210mm;
+    height: 297mm;
+    padding: 14mm 16mm;
+    background: white;
+    box-sizing: border-box;
+    page-break-after: always;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 0 auto 24px auto;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    font-family: Helvetica, Arial, sans-serif; /* Mima fuente de ReportLab */
+    position: relative;
+    /* Truco para mejorar la nitidez al exportar desde el navegador */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
+
+.pdf-page:last-child {
+    page-break-after: auto;
+}
+
+/* Colores institucionales */
+.text-primary { color: #0B3C5D; }
+.text-secondary { color: #1D63B8; }
+.text-muted { color: #475569; }
+.text-body { color: #334155; }
+
+/* Tarjeta calcada del diseño ReportLab */
+.profile-card {
+    height: 112mm;
+    background-color: #F8FAFC;
+    border: 0.8mm solid #E2E8F0;
+    border-radius: 3mm;
+    display: flex;
+    gap: 8mm;
+    padding: 6mm 8mm;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Barra lateral corporativa exacta (4mm de ancho) */
+.profile-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4mm;
+    background-color: #0B3C5D;
+}
+
+/* Foto cuadrada de 56mm alineada arriba */
+.photo-container {
+    width: 56mm;
+    height: 56mm;
+    flex-shrink: 0;
+    border: 0.8mm solid #CBD5E1;
+    background-color: white;
+    padding: 1.5mm;
+    /* Alineación superior para que quede a la misma altura que el nombre */
+    margin-top: 1mm; 
+    margin-bottom: 0; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.photo-placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: #F1F5F9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.silhouette {
+    width: 16px;
+    height: 16px;
+    background-color: #CBD5E1;
+    border-radius: 50%;
+    margin-bottom: 4px;
+}
+
+.silhouette-body {
+    width: 30px;
+    height: 12px;
+    background-color: #CBD5E1;
+    border-radius: 15px 15px 0 0;
+}
+
+/* Textos ajustados en puntos (pt) como en Python */
+.text-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-top: 1mm;
+}
+
+.text-name {
+    font-size: 14.5pt;
+    font-weight: bold;
+    margin: 0 0 2mm 0;
+}
+
+.text-role {
+    font-size: 10.5pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 0 0 3mm 0;
+}
+
+.text-meta {
+    font-size: 9.5pt;
+    margin: 0 0 5mm 0;
+}
+
+.divider {
+    height: 0.6mm;
+    background-color: #CBD5E1;
+    margin-bottom: 5mm;
+}
+
+.text-bio {
+    font-size: 10.5pt;
+    line-height: 1.45;
+    text-align: justify;
+    margin: 0;
+    overflow: hidden;
+    max-height: 58mm; 
+}
