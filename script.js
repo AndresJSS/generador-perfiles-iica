@@ -1,18 +1,17 @@
 let perfilesData = [];
-let perfilesFiltrados = []; // Almacena solo los de la sede seleccionada
+let perfilesFiltrados = [];
 
 const officeSelect = document.getElementById('officeSelect');
-const dateInput = document.getElementById('dateInput');
 const btnDownload = document.getElementById('btnDownload');
 const pdfContainer = document.getElementById('pdf-container');
 const emptyState = document.getElementById('empty-state');
 
-// Colocar la fecha de hoy automáticamente
-const hoy = new Date();
-dateInput.value = `${hoy.getDate().toString().padStart(2, '0')}/${(hoy.getMonth() + 1).toString().padStart(2, '0')}/${hoy.getFullYear()}`;
+// Evento que renderiza y sube la pantalla automáticamente al inicio
+officeSelect.addEventListener('change', () => {
+    renderPages();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
 
-officeSelect.addEventListener('change', renderPages);
-dateInput.addEventListener('input', renderPages);
 btnDownload.addEventListener('click', exportarPDF);
 
 // Carga automática del Excel
@@ -30,14 +29,12 @@ window.addEventListener('DOMContentLoaded', async () => {
         perfilesData = XLSX.utils.sheet_to_json(sheet);
         
         if (perfilesData.length > 0) {
-            // 1. Extraer todas las sedes únicas para armar el menú
             const sedesSet = new Set();
             perfilesData.forEach(person => {
                 const sede = obtenerValor(person, ['representacion_sede', 'representacion', 'sede']);
                 if (sede) sedesSet.add(sede.trim());
             });
 
-            // 2. Ordenar alfabéticamente y poblar el <select>
             const sedesArray = Array.from(sedesSet).sort();
             officeSelect.innerHTML = ''; 
             sedesArray.forEach(sede => {
@@ -51,7 +48,6 @@ window.addEventListener('DOMContentLoaded', async () => {
             btnDownload.innerHTML = 'Exportar a PDF';
             emptyState.style.display = 'none';
             
-            // 3. Renderizar con la primera sede detectada
             renderPages(); 
         }
     } catch (error) {
@@ -77,19 +73,19 @@ function renderPages() {
     pdfContainer.innerHTML = "";
     
     const representacionSeleccionada = officeSelect.value;
-    const fecha = dateInput.value;
     
-    // --- NUEVOS TÍTULOS ---
+    // --- CÁLCULO DE FECHA AUTOMÁTICA DEL DÍA ---
+    const hoy = new Date();
+    const fecha = `${hoy.getDate().toString().padStart(2, '0')}/${(hoy.getMonth() + 1).toString().padStart(2, '0')}/${hoy.getFullYear()}`;
+    
     const tituloDocumento = "Dashboard de matriz de capacidades técnicas";
     const subtituloDocumento = `Representación del IICA ${representacionSeleccionada}`;
 
-    // --- FILTRAR LOS PERFILES SEGÚN LA REPRESENTACIÓN SELECCIONADA ---
     perfilesFiltrados = perfilesData.filter(person => {
         const sede = obtenerValor(person, ['representacion_sede', 'representacion', 'sede']);
         return sede.trim().toLowerCase() === representacionSeleccionada.trim().toLowerCase();
     });
 
-    // Validar si por alguna razón quedó vacío
     if (perfilesFiltrados.length === 0) {
         btnDownload.disabled = true;
         pdfContainer.innerHTML = `
@@ -118,7 +114,6 @@ function renderPages() {
                     <img src="logo.png" alt="Logo" style="max-height: 16mm; max-width: 36mm; object-fit: contain;" 
                          onerror="this.style.display='none'">
                     
-                    <!-- white-space: nowrap fuerza a que el texto jamás salte a la siguiente línea -->
                     <div style="border-left: 1px solid #CBD5E1; padding-left: 4mm; white-space: nowrap;">
                         <h1 class="text-primary" style="font-size: 14.5pt; font-weight: bold; margin: 0 0 1mm 0;">${tituloDocumento}</h1>
                         <h2 class="text-muted" style="font-size: 10.5pt; font-weight: normal; margin: 0;">${subtituloDocumento}</h2>
