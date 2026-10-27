@@ -11,9 +11,8 @@
     justify-content: space-between;
     margin: 0 auto 24px auto;
     box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    font-family: Helvetica, Arial, sans-serif; /* Mima fuente de ReportLab */
+    font-family: Helvetica, Arial, sans-serif;
     position: relative;
-    /* Truco para mejorar la nitidez al exportar desde el navegador */
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
 }
@@ -28,20 +27,20 @@
 .text-muted { color: #475569; }
 .text-body { color: #334155; }
 
-/* Tarjeta calcada del diseño ReportLab */
+/* Tarjeta principal */
 .profile-card {
     height: 112mm;
     background-color: #F8FAFC;
     border: 0.8mm solid #E2E8F0;
     border-radius: 3mm;
     display: flex;
-    gap: 8mm;
+    gap: 6mm; /* Reducido para dar más ancho al texto */
     padding: 6mm 8mm;
     position: relative;
     overflow: hidden;
 }
 
-/* Barra lateral corporativa exacta (4mm de ancho) */
+/* Barra lateral corporativa */
 .profile-card::before {
     content: '';
     position: absolute;
@@ -52,15 +51,14 @@
     background-color: #0B3C5D;
 }
 
-/* Foto cuadrada de 56mm alineada arriba */
+/* Foto cuadrada reducida a 44mm (Antes 56mm) */
 .photo-container {
-    width: 56mm;
-    height: 56mm;
+    width: 44mm;
+    height: 44mm;
     flex-shrink: 0;
     border: 0.8mm solid #CBD5E1;
     background-color: white;
     padding: 1.5mm;
-    /* Alineación superior para que quede a la misma altura que el nombre */
     margin-top: 1mm; 
     margin-bottom: 0; 
     display: flex;
@@ -85,57 +83,58 @@
 }
 
 .silhouette {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     background-color: #CBD5E1;
     border-radius: 50%;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
 }
 
 .silhouette-body {
-    width: 30px;
-    height: 12px;
+    width: 26px;
+    height: 10px;
     background-color: #CBD5E1;
     border-radius: 15px 15px 0 0;
 }
 
-/* Textos ajustados en puntos (pt) como en Python */
+/* Textos ajustados para maximizar el espacio de la biografía */
 .text-content {
     flex: 1;
     display: flex;
     flex-direction: column;
-    margin-top: 1mm;
+    margin-top: 0.5mm;
 }
 
 .text-name {
-    font-size: 14.5pt;
+    font-size: 13pt; /* Reducido levemente */
     font-weight: bold;
-    margin: 0 0 2mm 0;
+    margin: 0 0 1.5mm 0;
 }
 
 .text-role {
-    font-size: 10.5pt;
+    font-size: 9.5pt; /* Reducido levemente */
     font-weight: bold;
     text-transform: uppercase;
-    margin: 0 0 3mm 0;
+    margin: 0 0 2mm 0;
 }
 
 .text-meta {
-    font-size: 9.5pt;
-    margin: 0 0 5mm 0;
+    font-size: 8.5pt; /* Reducido levemente */
+    margin: 0 0 3mm 0;
 }
 
 .divider {
     height: 0.6mm;
     background-color: #CBD5E1;
-    margin-bottom: 5mm;
+    margin-bottom: 3mm;
 }
 
+/* Biografía con mayor capacidad (74mm de altura máxima permitida) */
 .text-bio {
-    font-size: 10.5pt;
-    line-height: 1.45;
+    font-size: 9.5pt; /* Letra ligeramente más compacta */
+    line-height: 1.35; /* Interlineado optimizado */
     text-align: justify;
     margin: 0;
     overflow: hidden;
-    max-height: 58mm; 
+    max-height: 74mm; /* Límite ampliado para permitir muchas más líneas */
 }
