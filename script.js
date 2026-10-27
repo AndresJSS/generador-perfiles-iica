@@ -6,7 +6,6 @@ const btnDownload = document.getElementById('btnDownload');
 const pdfContainer = document.getElementById('pdf-container');
 const emptyState = document.getElementById('empty-state');
 
-// Evento que renderiza y sube la pantalla automáticamente al inicio
 officeSelect.addEventListener('change', () => {
     renderPages();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -14,7 +13,6 @@ officeSelect.addEventListener('change', () => {
 
 btnDownload.addEventListener('click', exportarPDF);
 
-// Carga automática del Excel
 window.addEventListener('DOMContentLoaded', async () => {
     try {
         const response = await fetch('./funcionarios.xlsx');
@@ -67,17 +65,14 @@ function obtenerValor(row, posiblesNombres) {
     return "";
 }
 
-// Función inteligente para detectar si es el Representante Principal (Inglés o Español)
 function esRepresentantePrincipal(cargo) {
     if (!cargo) return false;
     const c = cargo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     
-    // Si es un asistente, adjunto o deputy, NO es el representante principal
     if (c.includes("asistente") || c.includes("assistant") || c.includes("adjunto") || c.includes("deputy") || c.includes("apoyo")) {
         return false;
     }
     
-    // Retorna verdadero si contiene la palabra representante o representative
     return c.includes("representante") || c.includes("representative");
 }
 
@@ -88,20 +83,17 @@ function renderPages() {
     
     const representacionSeleccionada = officeSelect.value;
     
-    // --- CÁLCULO DE FECHA AUTOMÁTICA DEL DÍA ---
     const hoy = new Date();
     const fecha = `${hoy.getDate().toString().padStart(2, '0')}/${(hoy.getMonth() + 1).toString().padStart(2, '0')}/${hoy.getFullYear()}`;
     
     const tituloDocumento = "Dashboard de matriz de capacidades técnicas";
     const subtituloDocumento = `Representación del IICA ${representacionSeleccionada}`;
 
-    // 1. Filtrar las personas de la sede
     perfilesFiltrados = perfilesData.filter(person => {
         const sede = obtenerValor(person, ['representacion_sede', 'representacion', 'sede']);
         return sede.trim().toLowerCase() === representacionSeleccionada.trim().toLowerCase();
     });
 
-    // 2. Ordenar para que el Representante (Español o Inglés) quede siempre de primero
     perfilesFiltrados.sort((a, b) => {
         const cargoA = obtenerValor(a, ['tipo_de_cargo', 'cargo', 'puesto']);
         const cargoB = obtenerValor(b, ['tipo_de_cargo', 'cargo', 'puesto']);
@@ -109,9 +101,9 @@ function renderPages() {
         const aEsJefe = esRepresentantePrincipal(cargoA);
         const bEsJefe = esRepresentantePrincipal(cargoB);
         
-        if (aEsJefe && !bEsJefe) return -1; // A sube al primer lugar
-        if (!aEsJefe && bEsJefe) return 1;  // B sube al primer lugar
-        return 0; // Mantiene el orden original para el resto de personas
+        if (aEsJefe && !bEsJefe) return -1; 
+        if (!aEsJefe && bEsJefe) return 1;  
+        return 0; 
     });
 
     if (perfilesFiltrados.length === 0) {
@@ -133,10 +125,12 @@ function renderPages() {
         const page = document.createElement('div');
         page.className = "pdf-page";
 
+        // Se eliminó la línea azul claro (el acento absoluto)
+        // Se ajustaron los márgenes (margin-bottom a 6mm) para que las tarjetas no choquen con el pie de página
         let htmlContent = `
-            <div style="position: absolute; top: 0; left: 0; right: 0; height: 4mm; background-color: #0B3C5D;"></div>
+            <div style="position: absolute; top: 0; left: 0; right: 0; height: 4mm; background-color: #003366;"></div>
             
-            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10mm; border-bottom: 1.2mm solid #0B3C5D; padding-bottom: 4mm; position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 6mm; border-bottom: 1.2mm solid #003366; padding-bottom: 4mm; position: relative;">
                 
                 <div style="display: flex; align-items: center; gap: 4mm;">
                     <img src="logo.png" alt="Logo" style="max-height: 16mm; max-width: 36mm; object-fit: contain;" 
@@ -151,11 +145,10 @@ function renderPages() {
                 <div class="text-primary" style="font-size: 10.5pt; font-weight: bold; margin-bottom: 1.5mm; white-space: nowrap;">
                     ${fecha}
                 </div>
-
-                <div style="position: absolute; bottom: -1.2mm; left: 0; width: 25mm; height: 1.2mm; background-color: #1D63B8; transform: translateY(50%);"></div>
             </div>
             
-            <div style="flex: 1; display: flex; flex-direction: column; gap: 10mm;">
+            <!-- Se redujo el gap (espacio entre tarjetas) a 6mm para evitar cortes -->
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 6mm;">
         `;
 
         chunk.forEach(person => {
@@ -167,9 +160,9 @@ function renderPages() {
             const foto = obtenerValor(person, ['foto', 'imagen']);
 
             let metaTexto = [];
-            if (nacionalidad) metaTexto.push(`<b>Nacionalidad:</b> ${nacionalidad}`);
-            if (correo) metaTexto.push(`<b>Correo:</b> ${correo}`);
-            const metaHtml = metaTexto.join(' &nbsp;&nbsp;|&nbsp;&nbsp; ');
+            if (nacionalidad) metaTexto.push(`<div class="meta-line"><b>Nacionalidad:</b> ${nacionalidad}</div>`);
+            if (correo) metaTexto.push(`<div class="meta-line"><b>Correo:</b> ${correo}</div>`);
+            const metaHtml = metaTexto.join('');
 
             const photoHtml = foto 
                 ? `<img src="${foto}" class="photo-img" onerror="this.outerHTML='<div class=\\'photo-placeholder\\'><div class=\\'silhouette\\'></div><div class=\\'silhouette-body\\'></div></div>'">`

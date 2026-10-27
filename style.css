@@ -22,8 +22,8 @@
 }
 
 /* Colores institucionales */
-.text-primary { color: #0B3C5D; }
-.text-secondary { color: #1D63B8; }
+.text-primary { color: #003366; }
+.text-secondary { color: #006699; }
 .text-muted { color: #475569; }
 .text-body { color: #334155; }
 
@@ -31,7 +31,7 @@
 .profile-card {
     height: 112mm;
     background-color: #F8FAFC;
-    border: 0.8mm solid #E2E8F0;
+    border: 0.4mm solid #E2E8F0;
     border-radius: 3mm;
     display: flex;
     gap: 6mm; /* Reducido para dar más ancho al texto */
@@ -48,15 +48,15 @@
     top: 0;
     bottom: 0;
     width: 4mm;
-    background-color: #0B3C5D;
+    background-color: #003366;
 }
 
 /* Foto cuadrada reducida a 44mm (Antes 56mm) */
 .photo-container {
-    width: 44mm;
-    height: 44mm;
+    width: 50mm;
+    height: 50mm;
     flex-shrink: 0;
-    border: 0.8mm solid #CBD5E1;
+    border: 0.4mm solid #CBD5E1;
     background-color: white;
     padding: 1.5mm;
     margin-top: 1mm; 
@@ -91,7 +91,7 @@
 }
 
 .silhouette-body {
-    width: 26px;
+    width: 20px;
     height: 10px;
     background-color: #CBD5E1;
     border-radius: 15px 15px 0 0;
@@ -106,32 +106,43 @@
 }
 
 .text-name {
-    font-size: 13pt; /* Reducido levemente */
+    font-size: 14pt; /* Reducido levemente */
     font-weight: bold;
     margin: 0 0 1.5mm 0;
 }
 
 .text-role {
-    font-size: 9.5pt; /* Reducido levemente */
+    font-size: 12pt; /* Reducido levemente */
     font-weight: bold;
-    text-transform: uppercase;
     margin: 0 0 2mm 0;
 }
 
 .text-meta {
-    font-size: 8.5pt; /* Reducido levemente */
-    margin: 0 0 3mm 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5mm; /* Espacio entre nacionalidad y correo */
+}
+
+/* Aplicamos el tamaño DIRECTAMENTE a las líneas para que no falle */
+.meta-line {
+    font-size: 10.5pt; /* Prueba con 7.5pt o 8pt */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .divider {
-    height: 0.6mm;
-    background-color: #CBD5E1;
+    /* Usamos un borde exacto de 2 pixeles en lugar de milímetros para evitar el redondeo */
+    border-top: 1px solid #CBD5E1;
+    height: 0;
+    margin-top: 3mm;
     margin-bottom: 3mm;
 }
 
 /* Biografía con mayor capacidad (74mm de altura máxima permitida) */
 .text-bio {
-    font-size: 9.5pt; /* Letra ligeramente más compacta */
+    font-size: 10.5pt; /* Letra ligeramente más compacta */
     line-height: 1.35; /* Interlineado optimizado */
     text-align: justify;
     margin: 0;
