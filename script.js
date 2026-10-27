@@ -67,6 +67,20 @@ function obtenerValor(row, posiblesNombres) {
     return "";
 }
 
+// Función inteligente para detectar si es el Representante Principal (Inglés o Español)
+function esRepresentantePrincipal(cargo) {
+    if (!cargo) return false;
+    const c = cargo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    
+    // Si es un asistente, adjunto o deputy, NO es el representante principal
+    if (c.includes("asistente") || c.includes("assistant") || c.includes("adjunto") || c.includes("deputy") || c.includes("apoyo")) {
+        return false;
+    }
+    
+    // Retorna verdadero si contiene la palabra representante o representative
+    return c.includes("representante") || c.includes("representative");
+}
+
 function renderPages() {
     if (perfilesData.length === 0) return;
     
@@ -81,9 +95,23 @@ function renderPages() {
     const tituloDocumento = "Dashboard de matriz de capacidades técnicas";
     const subtituloDocumento = `Representación del IICA ${representacionSeleccionada}`;
 
+    // 1. Filtrar las personas de la sede
     perfilesFiltrados = perfilesData.filter(person => {
         const sede = obtenerValor(person, ['representacion_sede', 'representacion', 'sede']);
         return sede.trim().toLowerCase() === representacionSeleccionada.trim().toLowerCase();
+    });
+
+    // 2. Ordenar para que el Representante (Español o Inglés) quede siempre de primero
+    perfilesFiltrados.sort((a, b) => {
+        const cargoA = obtenerValor(a, ['tipo_de_cargo', 'cargo', 'puesto']);
+        const cargoB = obtenerValor(b, ['tipo_de_cargo', 'cargo', 'puesto']);
+        
+        const aEsJefe = esRepresentantePrincipal(cargoA);
+        const bEsJefe = esRepresentantePrincipal(cargoB);
+        
+        if (aEsJefe && !bEsJefe) return -1; // A sube al primer lugar
+        if (!aEsJefe && bEsJefe) return 1;  // B sube al primer lugar
+        return 0; // Mantiene el orden original para el resto de personas
     });
 
     if (perfilesFiltrados.length === 0) {
